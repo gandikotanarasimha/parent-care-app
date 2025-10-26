@@ -1,0 +1,16 @@
+# Server dependencies
+server/node_modules
+
+# Client dependencies
+client/node_modules
+
+# Environment variables (secrets!)
+server/.env
+
+# Vite build output (if you build it)
+client/dist
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
