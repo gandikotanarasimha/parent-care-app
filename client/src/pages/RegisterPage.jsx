@@ -1,4 +1,4 @@
-// File: client/src/pages/RegisterPage.jsx
+// File: client/src/pages/RegisterPage.jsx (Corrected)
 
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -26,7 +26,7 @@ function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
-  const [role, setRole] = useState('Requester'); // Default role
+  const [role, setRole] = useState('Requester');
 
   // UI state
   const [loading, setLoading] = useState(false);
@@ -34,6 +34,7 @@ function RegisterPage() {
 
   const navigate = useNavigate();
 
+  // --- THIS IS THE UPDATED FUNCTION ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -50,12 +51,23 @@ function RegisterPage() {
 
       setLoading(false);
       alert('Registration successful! Please log in.');
-      navigate('/login'); // Redirect to login
+      navigate('/login');
     } catch (err) {
       setLoading(false);
-      setError(err.response?.data?.message || 'Registration failed');
+      // --- THIS IS THE NEW, ROBUST ERROR HANDLING ---
+      if (err.response) {
+        // The server responded with a status code (e.g., 401, 500)
+        setError(err.response.data.message || 'Registration failed');
+      } else if (err.request) {
+        // The request was made but no response was received
+        setError('Server is not responding. Please try again in 30 seconds.');
+      } else {
+        // Something else happened
+        setError(err.message || 'An unknown error occurred');
+      }
     }
   };
+  // --- END OF UPDATED FUNCTION ---
 
   return (
     <Container component="main" maxWidth="xs">
@@ -153,123 +165,3 @@ function RegisterPage() {
 }
 
 export default RegisterPage;
-
-// // File: client/src/pages/RegisterPage.jsx
-
-// import React, { useState } from 'react';
-// import axios from 'axios';
-// import { useNavigate } from 'react-router-dom'; // Import for redirection
-
-// function RegisterPage() {
-//   // --- State for all form fields ---
-//   const [name, setName] = useState('');
-//   const [email, setEmail] = useState('');
-//   const [password, setPassword] = useState('');
-//   const [phone, setPhone] = useState('');
-//   const [role, setRole] = useState('Requester'); // Default to 'Requester'
-
-//   // --- State for loading and errors ---
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState(null);
-
-//   const navigate = useNavigate(); // Hook for redirection
-
-//   // --- Handle form submission ---
-//   const handleSubmit = async (e) => {
-//     e.preventDefault(); // Prevent default form refresh
-//     setLoading(true);
-//     setError(null);
-
-//     try {
-//       // --- Send data to backend API ---
-//       // We use '/api' because of the proxy we set in vite.config.js
-//       await axios.post('/api/auth/register', {
-//         name,
-//         email,
-//         password,
-//         phone,
-//         role,
-//       });
-
-//       // If successful:
-//       setLoading(false);
-//       alert('Registration successful! Please log in.');
-//       navigate('/login'); // Redirect to login page
-//     } catch (err) {
-//       // If error:
-//       setLoading(false);
-//       // Get error message from the backend response
-//       setError(err.response.data.message || 'Registration failed');
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <h2>Register a New Account</h2>
-//       <form onSubmit={handleSubmit}>
-//         {/* --- Name Field --- */}
-//         <div>
-//           <label>Name:</label>
-//           <input
-//             type="text"
-//             value={name}
-//             onChange={(e) => setName(e.target.value)}
-//             required
-//           />
-//         </div>
-
-//         {/* --- Email Field --- */}
-//         <div>
-//           <label>Email:</label>
-//           <input
-//             type="email"
-//             value={email}
-//             onChange={(e) => setEmail(e.target.value)}
-//             required
-//           />
-//         </div>
-
-//         {/* --- Password Field --- */}
-//         <div>
-//           <label>Password:</label>
-//           <input
-//             type="password"
-//             value={password}
-//             onChange={(e) => setPassword(e.target.value)}
-//             required
-//           />
-//         </div>
-
-//         {/* --- Phone Field --- */}
-//         <div>
-//           <label>Phone:</label>
-//           <input
-//             type="tel"
-//             value={phone}
-//             onChange={(e) => setPhone(e.target.value)}
-//             required
-//           />
-//         </div>
-
-//         {/* --- Role Field (Dropdown) --- */}
-//         <div>
-//           <label>I am a:</label>
-//           <select value={role} onChange={(e) => setRole(e.target.value)}>
-//             <option value="Requester">Requester (Looking for help)</option>
-//             <option value="Provider">Provider (Offering help)</option>
-//           </select>
-//         </div>
-
-//         {/* --- Submit Button --- */}
-//         <button type="submit" disabled={loading}>
-//           {loading ? 'Registering...' : 'Register'}
-//         </button>
-
-//         {/* --- Error Message --- */}
-//         {error && <p style={{ color: 'red' }}>{error}</p>}
-//       </form>
-//     </div>
-//   );
-// }
-
-// export default RegisterPage;
