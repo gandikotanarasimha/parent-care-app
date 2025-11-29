@@ -2,6 +2,8 @@
 
 This is a full-stack MERN (MongoDB, Express, React, Node.js) application built to serve as a comprehensive local service platform. The main idea is to connect users who need specific, real-world services with verified local providers.
 
+Live : https://parent-care-app.vercel.app/
+
 This project is built to support three main service categories:
 
 1.  **Day Consultancy (Elderly Care):** (This feature is **fully built and deployed!**) This service connects families with caregivers for their distant parents. Requesters (the children) can post help requests (e.g., "Need to take my mom to the hospital") or browse and directly hire local Providers (caregivers) to assist their parents.
